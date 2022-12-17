@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>test.actor-model</groupId>
+	<artifactId>ActorCluster</artifactId>
+	<packaging>jar</packaging>
+	<version>0.0.1</version>
+
+	<properties>
+     <maven.compiler.source>1.8</maven.compiler.source>
+     <maven.compiler.target>1.8</maven.compiler.target>
+     <akka.version>2.3.3</akka.version>
+     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+     <exec.mainClass>main.PrimeClusterApp</exec.mainClass>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-cluster_2.11</artifactId>
+			<version>2.5.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-contrib_2.11</artifactId>
+			<version>2.5.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.typesafe.akka</groupId>
+					<artifactId>akka-persistence-experimental_2.11</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-actor_2.11</artifactId>
+			<version>2.5.3</version>
+		</dependency>
+
+	</dependencies>
+	
+	<build>
+  		<plugins>
+  			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>org.example.PrimeClusterApp</mainClass>
+                </configuration>
+            </plugin>
+  			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>allinone</shadedClassifierName>
+                            <artifactSet>
+                                <includes>
+                                    <include>*:*</include>
+                                </includes>
+                            </artifactSet>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>reference.conf</resource>
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>main.PrimeClusterApp</Main-Class>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+    		<plugin>
+			    <artifactId>maven-assembly-plugin</artifactId>
+			    <configuration>
+			        <archive>
+			            <manifest>
+			                <mainClass>main.PrimeClusterApp</mainClass>
+			            </manifest>
+			        </archive>
+			        <descriptorRefs>
+			            <descriptorRef>jar-with-dependencies</descriptorRef>
+			        </descriptorRefs>
+			    </configuration>
+			</plugin>
+	  </plugins>
+	</build>
+	
+</project>
