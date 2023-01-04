@@ -20,6 +20,8 @@ public class PrimeClusterApp {
 		boolean createMaster = true;
 		String port = "1337";
 
+		// args can be used to only create workers 
+		// and to run more than one instance of the program on a single host
 		if (args.length > 0) {
 			System.out.println(args[0]);
 			System.setProperty("akka.remote.netty.tcp.port", args[0]);
@@ -43,9 +45,6 @@ public class PrimeClusterApp {
 		//Create RandomPool of 2 Workers
 		actorSystem.actorOf(new RandomPool(2).props(Props.create(
 		PrimeClusterWorkerActor.class)), "W_" + UUID.randomUUID());
-
-
-
 		
 	}
 

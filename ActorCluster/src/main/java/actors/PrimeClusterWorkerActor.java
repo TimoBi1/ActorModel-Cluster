@@ -7,10 +7,8 @@ import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.cluster.pubsub.DistributedPubSub;
 import akka.cluster.pubsub.DistributedPubSubMediator;
-import akka.dispatch.Futures;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import akka.japi.pf.ReceiveBuilder;
 import message.ConstantMessages;
 import message.PrimeResult;
 import message.SegmentMessage;
@@ -20,8 +18,6 @@ public class PrimeClusterWorkerActor extends AbstractActor implements ConstantMe
    private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
    private final ActorRef mediator = DistributedPubSub.get(getContext().system()).mediator();
-
-   private boolean working = false;
 
    public PrimeClusterWorkerActor() {
    }
